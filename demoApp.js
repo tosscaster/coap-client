@@ -132,26 +132,26 @@ function demoApp() {
           console.log(err);
         } else {
           console.log(rsp);
-          
-        setInterval(function() {
-          cnode1.so.read(
-            "temperature",
-            0,
-            "sensorValue",
-            undefined,
-            function() {}
-          );
-        }, 3000);
 
-        setInterval(function() {
-          cnode1.so.read(
-            "presence",
-            0,
-            "dInState",
-            undefined,
-            function() {}
-          );
-        }, 1000);
+          setInterval(function() {
+            cnode1.so.read(
+              "temperature",
+              0,
+              "sensorValue",
+              undefined,
+              function() {}
+            );
+          }, 3000);
+
+          setInterval(function() {
+            cnode1.so.read(
+              "presence",
+              0,
+              "dInState",
+              undefined,
+              function() {}
+            );
+          }, 1000);
         }
       });
     });
@@ -181,6 +181,7 @@ function demoApp() {
       console.log(rsp);
     });
     */
+
     setTimeout(function() {
       cnode1.register("127.0.0.1", 5683, function(err, rsp) {
         if (err) console.log(err);
@@ -201,6 +202,19 @@ function demoApp() {
       });
     }, 2000);
   }, 100);
+
+  cnode1.on("error", function(err) {
+    console.log(err);
+  });
+
+  cnode1.on("registered", function() {
+    console.log(">> MQTT cnode1 node is registered to a server");
+    var so = cnode1.getSmartObject();
+  });
+
+  cnode1.on("login", function() {
+    console.log(">> MQTT cnode1 node logs in the network");
+  });
 
   setTimeout(function() {
     //toastInd('Device node2 will join the network');
@@ -229,6 +243,19 @@ function demoApp() {
     }, 2000);
   }, 3500);
 
+  cnode2.on("error", function(err) {
+    console.log(err);
+  });
+
+  cnode2.on("registered", function() {
+    console.log(">> MQTT cnode2 node is registered to a server");
+    var so = cnode2.getSmartObject();
+  });
+
+  cnode2.on("login", function() {
+    console.log(">> MQTT cnode2 node logs in the network");
+  });
+
   setTimeout(function() {
     //toastInd('Device node3 will join the network');
 
@@ -252,6 +279,19 @@ function demoApp() {
       });
     }, 2000);
   }, 7000);
+
+  cnode3.on("error", function(err) {
+    console.log(err);
+  });
+
+  cnode3.on("registered", function() {
+    console.log(">> MQTT cnode3 node is registered to a server");
+    var so = cnode3.getSmartObject();
+  });
+
+  cnode3.on("login", function() {
+    console.log(">> MQTT cnode3 node logs in the network");
+  });
 
   setTimeout(function() {
     //toastInd('You can click on a lamp or a buzzer');
