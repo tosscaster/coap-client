@@ -113,7 +113,7 @@ var cnode1 = new CoapNode("cnode1", so1),
   cnode2 = new CoapNode("cnode2", so2),
   cnode3 = new CoapNode("cnode3", so3);
 
-var remoteCnode1, remoteCnode2, remoteCnode3;
+//var remoteCnode1, remoteCnode2, remoteCnode3;
 
 function demoApp() {
   if (demoAppEnabled) {
@@ -124,7 +124,63 @@ function demoApp() {
 
   setTimeout(function() {
     //toastInd('Device node1 will join the network');
+    /*
+    cnode1.on("bootstrapped", function() {
+      console.log("bootstrapped");
+      cnode1.registerAllCfg(function(err, rsp) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(rsp);
+          
+        setInterval(function() {
+          cnode1.so.read(
+            "temperature",
+            0,
+            "sensorValue",
+            undefined,
+            function() {}
+          );
+        }, 3000);
 
+        setInterval(function() {
+          cnode1.so.read(
+            "presence",
+            0,
+            "dInState",
+            undefined,
+            function() {}
+          );
+        }, 1000);
+        }
+      });
+    });
+
+    cnode1.on("registered", function() {
+      console.log("registered");
+    });
+
+    cnode1.on("deregistered", function(msg) {
+      console.log("deregistered");
+    });
+
+    cnode1.on("offline", function(msg) {
+      console.log("offline");
+    });
+
+    cnode1.on("reconnect", function(msg) {
+      console.log("reconnect");
+    });
+
+    cnode1.on("error", function(err) {
+      console.log(err);
+    });
+
+    console.log("call bootstrap ---------------");
+    cnode1.bootstrap("127.0.0.1", 5783, function(err, rsp) {
+      console.log(rsp);
+    });
+    */
     setTimeout(function() {
       cnode1.register("127.0.0.1", 5683, function(err, rsp) {
         if (err) console.log(err);
@@ -253,9 +309,9 @@ function demoApp() {
     }, 9000);
   }, 53000);
 
-  setTimeout(function() {
-    demoAppEnabled = false;
-  }, 59500);
+  //setTimeout(function() {
+  //  demoAppEnabled = false;
+  //}, 59500);
 }
 
 module.exports = demoApp;
