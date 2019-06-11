@@ -122,6 +122,9 @@ function demoApp() {
 
   demoAppEnabled = true;
 
+  //
+  // Factory Bootstrap
+  //
   setTimeout(function() {
     //toastInd('Device node1 will join the network');
     /*
@@ -183,6 +186,10 @@ function demoApp() {
     */
 
     setTimeout(function() {
+      cnode1.registerAllCfg(function(err, rsp) {
+        console.log("cnode1 registerAllCfg ", rsp);
+      });
+      /*
       cnode1.register("127.0.0.1", 5683, function(err, rsp) {
         if (err) console.log(err);
 
@@ -200,8 +207,14 @@ function demoApp() {
           cnode1.so.read("presence", 0, "dInState", undefined, function() {});
         }, 1000);
       });
+      */
     }, 2000);
   }, 100);
+
+  // configure server who you want to register
+  cnode1.configure("127.0.0.1", 5683, {
+    lifetime: 300
+  });
 
   cnode1.on("error", function(err) {
     console.log(err);
@@ -210,35 +223,79 @@ function demoApp() {
   cnode1.on("registered", function() {
     console.log(">> MQTT cnode1 node is registered to a server");
     var so = cnode1.getSmartObject();
+    //so.read("lwm2mSecurity", function(err, data) {
+    //  if (!err) console.log(data); // { '0':
+    //   { lwm2mServerURI: 'coap://192.168.1.113:5783',
+    //     bootstrapServer: false,
+    //     securityMode: 3,
+    //     pubKeyId: '',
+    //     serverPubKeyId: '',
+    //     secretKey: '',
+    //     shortServerId: 1 },
+    //});
+
+    setInterval(function() {
+      cnode1.so.read("temperature", 0, "sensorValue", undefined, function() {});
+    }, 3000);
+
+    setInterval(function() {
+      cnode1.so.read("presence", 0, "dInState", undefined, function() {});
+    }, 1000);
   });
 
   cnode1.on("login", function() {
     console.log(">> MQTT cnode1 node logs in the network");
   });
 
+  cnode1.on("logout ", function() {
+    console.log(">> MQTT cnode1 node logs out the network");
+  });
+
+  cnode1.on("deregistered", function(msg) {
+    console.log("cnode1 deregistered");
+  });
+
+  cnode1.on("offline", function(msg) {
+    console.log("cnode1 offline");
+  });
+
+  cnode1.on("reconnect", function(msg) {
+    console.log("cnode1 reconnect");
+  });
+
+  cnode1.on("announce", function(msg) {
+    console.log("cnode1 announce ", msg);
+  });
+
+  cnode1.on("observe", function(msg) {
+    console.log("cnode1 observe ", msg);
+  });
+
+  //
+  // Client Initiated Bootstrap
+  //
   setTimeout(function() {
     //toastInd('Device node2 will join the network');
 
     setTimeout(function() {
       cnode2.register("127.0.0.1", 5683, function(err, rsp) {
         if (err) console.log(err);
-
-        setInterval(function() {
-          cnode2.so.read(
-            "illuminance",
-            0,
-            "sensorValue",
-            undefined,
-            function() {}
-          );
-          cnode2.so.read(
-            "onOffSwitch",
-            0,
-            "dInState",
-            undefined,
-            function() {}
-          );
-        }, 1000);
+        // setInterval(function() {
+        //   cnode2.so.read(
+        //     "illuminance",
+        //     0,
+        //     "sensorValue",
+        //     undefined,
+        //     function() {}
+        //   );
+        //   cnode2.so.read(
+        //     "onOffSwitch",
+        //     0,
+        //     "dInState",
+        //     undefined,
+        //     function() {}
+        //   );
+        // }, 1000);
       });
     }, 2000);
   }, 3500);
@@ -250,12 +307,58 @@ function demoApp() {
   cnode2.on("registered", function() {
     console.log(">> MQTT cnode2 node is registered to a server");
     var so = cnode2.getSmartObject();
+    setInterval(function() {
+      cnode2.so.read("illuminance", 0, "sensorValue", undefined, function() {});
+      cnode2.so.read("onOffSwitch", 0, "dInState", undefined, function() {});
+    }, 1000);
   });
 
   cnode2.on("login", function() {
     console.log(">> MQTT cnode2 node logs in the network");
   });
 
+  cnode2.on("logout ", function() {
+    console.log(">> MQTT cnode2 node logs out the network");
+  });
+
+  cnode2.on("deregistered", function(msg) {
+    console.log("cnode2 deregistered");
+  });
+
+  cnode2.on("offline", function(msg) {
+    console.log("cnode2 offline");
+  });
+
+  cnode2.on("reconnect", function(msg) {
+    console.log("cnode2 reconnect");
+  });
+
+  cnode2.on("announce", function(msg) {
+    console.log("cnode2 announce ", msg);
+  });
+
+  cnode2.on("observe", function(msg) {
+    console.log("cnode2 observe ", msg);
+  });
+
+  cnode2.on("bootstrapped", function() {
+    // If the bootstrap procedure completes successfully, 'bootstrapped' will be fired
+    console.log("bootstrapped");
+    // after bootstrapped, you can register to all the servers that have been configured by Bootstrap Server
+    cnode2.registerAllCfg(function(err, rsp) {
+      if (err) console.log(err);
+      else {
+        console.log("cnode2 registerAllCfg ", rsp); // { status: '2.01', data: xxxx }
+      }
+    });
+  });
+
+  // bootstrap to a Bootstrap Server with its ip and port
+  //cnode2.bootstrap("127.0.0.1", 5783, function(err, rsp) {
+  //  console.log(rsp); // { status: '2.04' }
+  //});
+
+  //------------------------------------------------------
   setTimeout(function() {
     //toastInd('Device node3 will join the network');
 
@@ -291,6 +394,30 @@ function demoApp() {
 
   cnode3.on("login", function() {
     console.log(">> MQTT cnode3 node logs in the network");
+  });
+
+  cnode3.on("logout ", function() {
+    console.log(">> MQTT cnode3 node logs out the network");
+  });
+
+  cnode3.on("deregistered", function(msg) {
+    console.log("cnode3 deregistered");
+  });
+
+  cnode3.on("offline", function(msg) {
+    console.log("cnode3 offline");
+  });
+
+  cnode3.on("reconnect", function(msg) {
+    console.log("cnode3 reconnect");
+  });
+
+  cnode3.on("announce", function(msg) {
+    console.log("cnode3 announce ", msg);
+  });
+
+  cnode3.on("observe", function(msg) {
+    console.log("cnode3 observe ", msg);
   });
 
   setTimeout(function() {
