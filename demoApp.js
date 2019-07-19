@@ -221,7 +221,7 @@ function demoApp() {
   });
 
   cnode1.on("registered", function() {
-    console.log(">> MQTT cnode1 node is registered to a server");
+    console.log(">> coap cnode1 node is registered to a server");
     var so = cnode1.getSmartObject();
     //so.read("lwm2mSecurity", function(err, data) {
     //  if (!err) console.log(data); // { '0':
@@ -244,11 +244,11 @@ function demoApp() {
   });
 
   cnode1.on("login", function() {
-    console.log(">> MQTT cnode1 node logs in the network");
+    console.log(">> coap cnode1 node logs in the network");
   });
 
   cnode1.on("logout ", function() {
-    console.log(">> MQTT cnode1 node logs out the network");
+    console.log(">> coap cnode1 node logs out the network");
   });
 
   cnode1.on("deregistered", function(msg) {
@@ -305,7 +305,7 @@ function demoApp() {
   });
 
   cnode2.on("registered", function() {
-    console.log(">> MQTT cnode2 node is registered to a server");
+    console.log(">> coap cnode2 node is registered to a server");
     var so = cnode2.getSmartObject();
     setInterval(function() {
       cnode2.so.read("illuminance", 0, "sensorValue", undefined, function() {});
@@ -314,11 +314,11 @@ function demoApp() {
   });
 
   cnode2.on("login", function() {
-    console.log(">> MQTT cnode2 node logs in the network");
+    console.log(">> coap cnode2 node logs in the network");
   });
 
   cnode2.on("logout ", function() {
-    console.log(">> MQTT cnode2 node logs out the network");
+    console.log(">> coap cnode2 node logs out the network");
   });
 
   cnode2.on("deregistered", function(msg) {
@@ -388,16 +388,16 @@ function demoApp() {
   });
 
   cnode3.on("registered", function() {
-    console.log(">> MQTT cnode3 node is registered to a server");
+    console.log(">> coap cnode3 node is registered to a server");
     var so = cnode3.getSmartObject();
   });
 
   cnode3.on("login", function() {
-    console.log(">> MQTT cnode3 node logs in the network");
+    console.log(">> coap cnode3 node logs in the network");
   });
 
   cnode3.on("logout ", function() {
-    console.log(">> MQTT cnode3 node logs out the network");
+    console.log(">> coap cnode3 node logs out the network");
   });
 
   cnode3.on("deregistered", function(msg) {
